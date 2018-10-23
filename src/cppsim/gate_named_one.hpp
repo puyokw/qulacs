@@ -44,6 +44,9 @@ public:
 	 */
     ClsXGate(UINT target_qubit_index) {
         this->_update_func = X_gate;
+#ifdef _USE_GPU
+		this->_update_func_gpu = X_gate_host;
+#endif
         this->_name = "X";
         this->_target_qubit_list.push_back(TargetQubitInfo(target_qubit_index, FLAG_X_COMMUTE ));
         this->_gate_property = FLAG_PAULI | FLAG_CLIFFORD;
