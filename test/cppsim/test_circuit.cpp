@@ -17,8 +17,6 @@
 #include <cppsim/pauli_operator.hpp>
 
 
-
-
 TEST(CircuitTest, CircuitBasic) {
     Eigen::MatrixXcd Identity(2, 2), X(2, 2), Y(2, 2), Z(2, 2), H(2, 2), S(2, 2), T(2, 2), sqrtX(2, 2), sqrtY(2, 2), P0(2, 2), P1(2, 2);
 
@@ -108,17 +106,17 @@ TEST(CircuitTest, CircuitBasic) {
     target = random.int32() % n;
     angle = random.uniform() * 3.14159;
     circuit.add_RX_gate(target,angle);
-    state_eigen = get_expanded_eigen_matrix_with_identity(target, cos(angle)*Identity + 1.i*sin(angle)*X, n)*state_eigen;
+    state_eigen = get_expanded_eigen_matrix_with_identity(target, cos(angle/2)*Identity + 1.i*sin(angle/2)*X, n)*state_eigen;
 
     target = random.int32() % n;
     angle = random.uniform() * 3.14159;
     circuit.add_RY_gate(target, angle);
-    state_eigen = get_expanded_eigen_matrix_with_identity(target, cos(angle)*Identity + 1.i*sin(angle)*Y, n)*state_eigen;
+    state_eigen = get_expanded_eigen_matrix_with_identity(target, cos(angle/2)*Identity + 1.i*sin(angle/2)*Y, n)*state_eigen;
 
     target = random.int32() % n;
     angle = random.uniform() * 3.14159;
     circuit.add_RZ_gate(target, angle);
-    state_eigen = get_expanded_eigen_matrix_with_identity(target, cos(angle)*Identity + 1.i*sin(angle)*Z, n)*state_eigen;
+    state_eigen = get_expanded_eigen_matrix_with_identity(target, cos(angle/2)*Identity + 1.i*sin(angle/2)*Z, n)*state_eigen;
 
     target = random.int32() % n;
     target_sub = random.int32() % (n-1);
@@ -141,7 +139,6 @@ TEST(CircuitTest, CircuitBasic) {
     circuit.update_quantum_state(&state);
     for (ITYPE i = 0; i < dim; ++i) ASSERT_NEAR(abs(state_eigen[i] - state.data_cpp()[i]), 0, eps);
 }
-
 
 
 TEST(CircuitTest, CircuitOptimize) {
@@ -696,3 +693,13 @@ TEST(CircuitTest, RotateDiagonalObservable){
     ASSERT_NEAR(test_res.imag(), 0, eps);
 
 }
+
+
+TEST(CircuitTest, SpecialGatesToString) {
+	QuantumState state(1);
+	QuantumCircuit c(1);
+	c.add_gate(gate::DepolarizingNoise(0, 0));
+	c.update_quantum_state(&state);
+	std::string s = c.to_string();
+}
+
