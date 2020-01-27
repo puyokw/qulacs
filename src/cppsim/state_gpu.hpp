@@ -216,6 +216,12 @@ public:
 		return _copy_state;
 	}
 
+    std::vector<CPPCTYPE> duplicate_data_cppvec() const {
+        std::vector<CPPCTYPE> _copy_state(dim, 0);
+        get_quantum_state_host(this->_state_vector, _copy_state.data(), dim, _cuda_stream, device_number);
+        return _copy_state;
+    }
+
 	/**
 	 * \~japanese-en 量子状態を足しこむ
 	 */

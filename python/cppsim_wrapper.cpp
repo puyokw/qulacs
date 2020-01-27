@@ -211,7 +211,8 @@ PYBIND11_MODULE(qulacs, m) {
 		.def("sampling", (std::vector<ITYPE>(QuantumStateGpu::*)(UINT))&QuantumStateGpu::sampling, "Sampling measurement results", py::arg("count"))
 		.def("sampling", (std::vector<ITYPE>(QuantumStateGpu::*)(UINT, UINT))&QuantumStateGpu::sampling, "Sampling measurement results", py::arg("count"), py::arg("seed"))
 		.def("get_vector", [](const QuantumStateGpu& state) {
-            Eigen::VectorXcd vec = Eigen::Map<Eigen::VectorXcd>(state.duplicate_data_cpp(), state.dim);
+            //Eigen::VectorXcd vec = Eigen::Map<Eigen::VectorXcd>(state.duplicate_data_cpp(), state.dim);
+            std::vector<CPPCTYPE> vec = state.duplicate_data_cppvec();
             return vec;
         }, pybind11::return_value_policy::take_ownership, "Get state vector")
         .def("get_qubit_count", [](const QuantumStateGpu& state) -> unsigned int {return (unsigned int) state.qubit_count; }, "Get qubit count")
